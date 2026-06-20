@@ -144,7 +144,17 @@ NO_PARKING_ZONES = [
 
 INFERENCE_IMG_SIZE = 640
 MAX_DETECTIONS = 100
-DEVICE = "auto"  # "auto", "cpu", "0" (GPU 0), "cuda"
+def _resolve_device() -> str:
+    """Resolve device: use CUDA if available, else CPU."""
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return "0"  # GPU 0
+    except ImportError:
+        pass
+    return "cpu"
+
+DEVICE = _resolve_device()
 
 # Video processing
 VIDEO_BATCH_SIZE = 1
