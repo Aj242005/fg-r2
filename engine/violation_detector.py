@@ -112,6 +112,7 @@ class ViolationDetector:
             iou=iou,
             imgsz=img_size,
             max_det=config.MAX_DETECTIONS,
+            agnostic_nms=True,
             verbose=False,
             device=self.device,
         )

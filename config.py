@@ -82,7 +82,7 @@ PLATE_CLASSES = {
 # ============================================================================
 
 # Detection thresholds
-VIOLATION_CONF_THRESHOLD = 0.25      # YOLO detection confidence
+VIOLATION_CONF_THRESHOLD = 0.15      # YOLO detection confidence
 PLATE_CONF_THRESHOLD = 0.30          # Plate detection confidence
 OCR_CONF_THRESHOLD = 0.40            # OCR text confidence
 
