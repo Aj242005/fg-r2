@@ -142,7 +142,7 @@ NO_PARKING_ZONES = [
 # INFERENCE SETTINGS
 # ============================================================================
 
-INFERENCE_IMG_SIZE = 640
+INFERENCE_IMG_SIZE = 1280
 MAX_DETECTIONS = 100
 def _resolve_device() -> str:
     """Resolve device: use CUDA if available, else CPU."""
