@@ -56,6 +56,7 @@ class ViolationReport:
             "plate_count": len(self.plates),
             "violations": self.violations,
             "plates": self.plates,
+            "detections": self.all_detections,
             "detection_count": len(self.all_detections),
             "processing_time_ms": round(self.processing_time_ms, 2),
         }
