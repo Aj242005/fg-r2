@@ -34,6 +34,7 @@ class FrameReport(BaseModel):
     plate_count: int
     violations: List[ViolationDetail]
     plates: List[Dict[str, Any]]
+    detections: List[Dict[str, Any]] = Field(default_factory=list)
     detection_count: int
     processing_time_ms: float
 
