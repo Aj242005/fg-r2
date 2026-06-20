@@ -238,7 +238,7 @@ class ViolationPipeline:
                     detections,
                     img_width=w,
                     img_height=h,
-                    tracked_objects=tracked_objects,
+                    tracked_objects=tracked_objects,  # type: ignore
                 )
                 all_violations.extend(results)
             except TypeError:
