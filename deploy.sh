@@ -19,7 +19,7 @@ set -euo pipefail
 # ┌──────────────────────────────────────────┐
 # │  ⚙️  CONFIGURE THESE                     │
 # └──────────────────────────────────────────┘
-GITHUB_REPO="https://github.com/YOUR_USER/YOUR_REPO.git"   # ← CHANGE THIS
+GITHUB_REPO="https://github.com/Aj242005/fg-r2.git"
 BRANCH="main"                                                # ← branch to deploy
 APP_DIR="$HOME/fgr2-backend"
 
