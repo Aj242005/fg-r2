@@ -88,3 +88,57 @@ class DatasetAnalysisResponse(BaseModel):
     issues: List[str] = Field(default_factory=list)
     splits: Dict[str, Dict[str, int]] = Field(default_factory=dict)
     is_valid: bool = True
+
+
+# ── NEW: Dashboard Data Models ──
+
+class ViolationRecord(BaseModel):
+    """A persisted violation record from the database."""
+    id: int
+    plate_number: str
+    violation_type: str
+    confidence: float
+    severity: str
+    location: str
+    fine_amount: int
+    status: str
+    image_path: Optional[str] = None
+    created_at: Optional[str] = None
+
+
+class ViolationListResponse(BaseModel):
+    """Paginated list of violations."""
+    success: bool = True
+    violations: List[ViolationRecord]
+    total: int
+    page: int
+    limit: int
+
+
+class HourlyCount(BaseModel):
+    hour: str
+    count: int
+
+class TypeCount(BaseModel):
+    name: str
+    value: int
+
+class ViolationStatsResponse(BaseModel):
+    """Aggregated violation statistics for the dashboard."""
+    success: bool = True
+    total_today: int = 0
+    total_week: int = 0
+    total_month: int = 0
+    challans_issued: int = 0
+    by_type: List[TypeCount] = Field(default_factory=list)
+    by_hour: List[HourlyCount] = Field(default_factory=list)
+
+
+class EntityResponse(BaseModel):
+    """All violation data for a specific license plate."""
+    success: bool = True
+    plate_number: str
+    total_violations: int = 0
+    total_fines: int = 0
+    unpaid_fines: int = 0
+    violations: List[ViolationRecord] = Field(default_factory=list)

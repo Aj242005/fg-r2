@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
+from server.database import init_db
 import config
 from pipeline import ViolationPipeline
 from server.routes import router, set_pipeline
@@ -59,6 +60,14 @@ async def lifespan(app: FastAPI):
         except FileNotFoundError as e2:
             print(f"❌ No models available: {e2}")
             print("Please train models using the scripts in training/ and place .pt files in models/")
+
+    # Initialize database tables
+    try:
+        await init_db()
+        print("✅ Database tables initialized.")
+    except Exception as e:
+        print(f"⚠️  Database init warning: {e}")
+        print("   Dashboard data features will be unavailable.")
 
     print(f"\n📡 Server running at http://{config.SERVER_HOST}:{config.SERVER_PORT}")
     print(f"📖 API docs at http://localhost:{config.SERVER_PORT}/docs")

@@ -4,19 +4,38 @@
 # ============================================
 #
 # Usage:
-#   1. Copy .env.example to .env and fill in values
-#   2. Point fgr2-backend.mooo.com A record to your GCP VM IP
-#   3. docker compose up -d --build
+#   1. docker compose up -d --build
+#   2. PostgreSQL runs locally inside the VM alongside the app.
 #
 # Ports exposed to the internet:
 #   80  → Caddy (HTTP, auto-redirects to HTTPS)
 #   443 → Caddy (HTTPS with auto Let's Encrypt cert)
 #
-# Internal:
+# Internal only:
 #   8000 → FastAPI (only accessible via Caddy)
+#   5432 → PostgreSQL (only accessible by app container)
 # ============================================
 
 services:
+  # ── PostgreSQL Database (local to the VM) ──
+  db:
+    image: postgres:16-alpine
+    container_name: traffic-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: traffic_db
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # ── FastAPI Application ──
   app:
     build:
@@ -36,8 +55,12 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - EASYOCR_MODULE_PATH=/app/.easyocr
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/traffic_db
     networks:
       - backend
+    depends_on:
+      db:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
@@ -72,6 +95,8 @@ services:
         condition: service_healthy
 
 volumes:
+  pg-data:
+    driver: local
   app-output:
     driver: local
   easyocr-cache:
